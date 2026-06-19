@@ -47,10 +47,14 @@
   padding: 0;
   box-sizing: border-box;
 }
+html, body {
+  overflow-x: hidden !important;
+  width: 100vw !important;
+  max-width: 100% !important;
+}
 html {
   scroll-behavior: smooth;
   font-size: 15px;
-  overflow-x: hidden;
 }
 body {
   font-family: 'Inter', -apple-system, sans-serif;
@@ -59,7 +63,6 @@ body {
   line-height: 1.5;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
 }
 
 /* ===== LOADING OVERLAY ===== */
@@ -1568,6 +1571,86 @@ body {
 }
 
 @media(max-width:768px) {
+  /* BUG 3: Global Horizontal Overflow Protection */
+  html, body {
+    overflow-x: hidden !important;
+    width: 100vw !important;
+    max-width: 100% !important;
+  }
+
+  /* BUG 1: Top Header / Navbar Overlap & Squish Protection */
+  .portal-header {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 0 12px !important; /* Tight padding to save space */
+  }
+  .ph-left {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    min-width: 0 !important;
+    flex: 1 !important;
+  }
+  .ph-emblem {
+    flex-shrink: 0 !important;
+    width: 36px !important;
+    height: 36px !important;
+    font-size: 1.4rem !important;
+  }
+  .ph-text {
+    min-width: 0 !important;
+    flex: 1 !important;
+  }
+  .ph-text strong {
+    font-size: 0.9rem !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    display: block !important;
+  }
+  .ph-text span {
+    display: none !important; /* Hide location text / subtitle on mobile */
+  }
+  .ph-right {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    flex-shrink: 0 !important;
+  }
+  .ph-badge, .ph-role {
+    flex-shrink: 0 !important;
+    padding: 4px 8px !important;
+    font-size: 0.7rem !important;
+  }
+  .btn-logout {
+    flex-shrink: 0 !important;
+    padding: 6px 10px !important;
+    font-size: 0.75rem !important;
+    min-height: 36px !important; /* Balanced for header height */
+  }
+
+  /* BUG 2: Login Modal & Button Overflow Protection */
+  .modal {
+    width: 90% !important;
+    max-width: 400px !important;
+    margin: 0 auto !important;
+    height: auto !important;
+    min-height: auto !important;
+  }
+  .modal-ft {
+    display: flex !important;
+    flex-direction: column-reverse !important; /* Stacks vertically: Cancel at bottom, Action at top */
+    gap: 12px !important;
+    width: 100% !important;
+    padding: 1.5rem !important;
+  }
+  .modal-ft .btn {
+    width: 100% !important;
+    justify-content: center !important;
+    min-height: 48px !important; /* thumb-friendly touch target */
+  }
+
   /* Screen Padding */
   .portal-main {
     padding: 1.5rem 16px !important;
@@ -1579,12 +1662,6 @@ body {
   }
   .wh-login-panel {
     padding: 2rem 16px !important;
-  }
-
-  /* No Hardcoded Heights on Containers */
-  .card, .modal, .wh-login-panel, .screen, .portal-layout {
-    height: auto !important;
-    min-height: auto !important;
   }
 
   /* Text Wrapping Safe Gates */
@@ -1602,7 +1679,7 @@ body {
   }
 
   /* Touch Targets (Minimum 48px Height/Width) */
-  .btn, .btn-primary, .btn-teal, .btn-gold, .btn-danger, .btn-outline, .btn-logout {
+  .btn, .btn-primary, .btn-teal, .btn-gold, .btn-danger, .btn-outline {
     min-height: 48px !important;
     padding: 12px 20px !important;
   }

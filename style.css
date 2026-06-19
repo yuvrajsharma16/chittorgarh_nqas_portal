@@ -242,7 +242,7 @@ body {
 }
 .wh-attr {
   font-size: 0.75rem;
-  font-weight: 650;
+  font-weight: 655;
   color: var(--accent-gold);
   margin-top: 0.75rem;
   text-transform: uppercase;
@@ -1566,6 +1566,92 @@ body {
 }
 
 @media(max-width:768px) {
+  /* Screen Padding */
+  .portal-main {
+    padding: 1.5rem 16px !important;
+    width: 100%;
+  }
+  .welcome-hero {
+    padding: 3rem 16px !important;
+    gap: 2.5rem !important;
+  }
+  .wh-login-panel {
+    padding: 2rem 16px !important;
+  }
+
+  /* No Hardcoded Heights on Containers */
+  .card, .modal, .wh-login-panel, .screen, .portal-layout {
+    height: auto !important;
+    min-height: auto !important;
+  }
+
+  /* Text Wrapping Safe Gates */
+  .wh-title {
+    font-size: 2.2rem !important;
+    word-break: break-word;
+  }
+  .sec-hd h2 {
+    font-size: 1.35rem !important;
+    word-break: break-word;
+  }
+  .info-val, .oi-title, .dl-info strong {
+    word-break: break-word !important;
+    white-space: normal !important;
+  }
+
+  /* Touch Targets (Minimum 48px Height/Width) */
+  .btn, .btn-primary, .btn-teal, .btn-gold, .btn-danger, .btn-outline, .btn-logout {
+    min-height: 48px !important;
+    padding: 12px 20px !important;
+  }
+  .form-group input, .form-group select, .form-group textarea,
+  .fg input, .fg select, .fg textarea {
+    min-height: 48px !important;
+    font-size: 16px !important; /* Prevents auto-zoom on iOS */
+  }
+  .form-group, .fg {
+    margin-bottom: 12px !important; /* Mis-tap prevention: 10px+ vertical separation */
+  }
+
+  /* Dynamic Dropdowns & Administrative Browsers grid collapse */
+  .facility-selector-bar div, 
+  #admin-facility-browser div {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 12px !important;
+  }
+  .facility-selector-bar select, 
+  #admin-facility-browser select,
+  .facility-selector-bar button,
+  #admin-facility-browser button {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 48px !important;
+  }
+
+  /* Top horizontal scrollable tab containers */
+  .admin-tabs {
+    display: flex !important;
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+    gap: 12px !important;
+    border-bottom: 1.5px solid var(--neutral-200) !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Hide standard Firefox scrollbars */
+    padding: 0 4px !important;
+    width: 100% !important;
+  }
+  .admin-tabs::-webkit-scrollbar {
+    display: none !important; /* Hide Chrome/Safari scrollbars */
+  }
+  .admin-tab {
+    flex: 0 0 auto !important; /* Prevent tab scaling compression, allow clean swipe */
+    padding: 12px 16px !important;
+    min-height: 48px !important;
+    border-bottom: 3px solid transparent;
+  }
+
+  /* Sidebar & layout overrides */
   .btn-hamburger {
     display: block;
   }
@@ -1585,27 +1671,28 @@ body {
   .sidebar-overlay {
     display: block;
   }
-  .portal-main {
-    padding: 1.25rem 1rem;
-    width: 100%;
-  }
+
+  /* Grid & Flex Collapses */
   .form-row, .form-row.three {
     grid-template-columns: 1fr !important;
-    gap: 1rem;
+    gap: 12px !important;
   }
   .assessor-row {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+    padding: 1.25rem !important;
   }
   .btn-rm-asr {
     width: 100%;
+    min-height: 48px !important;
   }
   .score-grid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
   }
   .info-grid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
   }
   .ph-badge {
     display: none;

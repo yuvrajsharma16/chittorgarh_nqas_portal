@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>National Quality Assurance Standards (NQAS) Registry — Chittorgarh</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ===== LOADING OVERLAY ===== -->
+<div id="loading-overlay">
+  <div class="spinner"></div>
+  <div id="loading-text">Establishing Secure Connection...</div>
+</div>
+
+<!-- ===== GOVERNMENT TOP RIBBON ===== -->
+<div class="gov-ribbon"></div>
+<div class="gov-top-bar">
+  <div class="gov-top-left">
+    <span>Department of Medical, Health &amp; Family Welfare</span>
+    <span style="opacity: 0.5;">|</span>
+    <span>Government of Rajasthan</span>
+  </div>
+  <div class="gov-top-right">
+    <span>Version v2.3</span>
+  </div>
+</div>
+
+<!-- ===== WELCOME SCREEN ===== -->
+<div id="s-welcome" class="screen active">
+  <div class="welcome-hero">
+    <div class="wh-content">
+      <div class="wh-emblem-box">
+        <div class="wh-emblem-icon">🏛️</div>
+        <div class="wh-department">
+          Department of Medical, Health &amp; Family Welfare
+          <span>Government of Rajasthan</span>
+        </div>
+      </div>
+      <h1 class="wh-title">
+        NQAS Assessment Portal
+      </h1>
+      <p class="wh-sub">Chittorgarh District — Assessor Desk</p>
+      
+      <div class="wh-quote">
+        <div class="wh-quote-hi">"The land of Chittorgarh is of the brave — the health of its people is our responsibility. Quality is our pledge, dedication our nature."</div>
+        <div class="wh-attr">— NQAS Chittorgarh, Rajasthan</div>
+      </div>
+    </div>
+    
+    <div class="wh-login-panel">
+      <div class="ls-head">
+        <h2>Secure Portal Access <small>Establish Authorized Session</small></h2>
+      </div>
+      <div class="login-cards">
+        <div class="login-card" onclick="openAssessorLogin()">
+          <div class="lc-icon">🩺</div>
+          <div class="lc-details">
+            <div class="lc-label">Assessor Audit Workspace</div>
+            <div class="lc-desc">Access Workspace for authorized external assessors performing official quality audits.</div>
+          </div>
+        </div>
+        <div class="login-card" onclick="openAdminLogin()">
+          <div class="lc-icon">🛡️</div>
+          <div class="lc-details">
+            <div class="lc-label">Administrative Dashboard</div>
+            <div class="lc-desc">Command panel for District Quality Assurance Officers (DQAC) to manage baseline parameters.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <footer class="portal-footer">
+    <div class="portal-footer-logo">🏛️</div>
+    <p>National Quality Assurance Standards (NQAS) represent an important institutional framework mandated by the Government of India to maintain high standards of clinical safety, hygiene, and efficiency across government health centers.</p>
+    <div class="portal-footer-copy">
+      © 2026 Department of Medical &amp; Health, Chittorgarh, Government of Rajasthan. All Rights Reserved.
+    </div>
+  </footer>
+</div>
+
+<!-- ===== ASSESSOR LOGIN MODAL ===== -->
+<div id="modal-asr" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-hd">
+      <h3>🩺 Verify Assessor Credentials</h3>
+    </div>
+    <div class="modal-bd">
+      <div class="form-group">
+        <label>Assessor Full Name</label>
+        <input type="text" id="a-name" placeholder="Enter your full name"/>
+        <div class="err-msg" id="err-aname">⚠ Please enter your name</div>
+      </div>
+      <div class="form-group">
+        <label>Registered Contact Number (10-Digit)</label>
+        <div class="phone-row">
+          <div class="phone-prefix">+91</div>
+          <input type="tel" id="a-phone" placeholder="10-digit number" maxlength="10" pattern="[6-9][0-9]{9}"/>
+        </div>
+        <div class="err-msg" id="err-aphone">⚠ Enter valid 10-digit number</div>
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn btn-outline" onclick="closeModal('modal-asr')">Cancel</button>
+      <button class="btn btn-teal" onclick="assessorNext()">Next Step →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FACILITY MODAL ===== -->
+<div id="modal-fac" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-hd">
+      <h3>🏥 Target Facility Scope</h3>
+    </div>
+    <div class="modal-bd">
+      <div class="step-dots">
+        <div class="sd active" id="sd1"></div>
+        <div class="sd" id="sd2"></div>
+        <div class="sd" id="sd3"></div>
+      </div>
+      <div class="form-group">
+        <label>Institutional Category (Facility Type)</label>
+        <select id="sel-ftype" onchange="populateBlocks()">
+          <option value="">— Select Facility Type —</option>
+          <option value="AAM-SC">AAM-SC</option>
+          <option value="PHC">PHC</option>
+        </select>
+        <div class="err-msg" id="err-ftype">⚠ Select facility type</div>
+      </div>
+      <div class="form-group">
+        <label>Administrative Block</label>
+        <select id="sel-block" onchange="populateFacilities();updateStepDots(2);" disabled>
+          <option value="">— Select Block —</option>
+        </select>
+        <div class="err-msg" id="err-block">⚠ Select block</div>
+      </div>
+      <div class="form-group">
+        <label>Specific Healthcare Facility Name</label>
+        <select id="sel-facility" onchange="updateStepDots(3);" disabled>
+          <option value="">— Select Facility —</option>
+        </select>
+        <div class="err-msg" id="err-fac">⚠ Select facility</div>
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn btn-outline" onclick="closeModal('modal-fac');openAssessorLogin()">← Back</button>
+      <button class="btn btn-teal" onclick="facilityConfirm()">Go to Audit Desk →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ADMIN LOGIN MODAL ===== -->
+<div id="modal-adm" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-hd">
+      <h3>🛡️ Secure Administrative Login</h3>
+    </div>
+    <div class="modal-bd">
+      <div class="form-group">
+        <label>Administrative Username</label>
+        <input type="text" id="adm-user" placeholder="Admin username"/>
+        <div class="err-msg" id="err-admuser">⚠ Please enter username</div>
+      </div>
+      <div class="form-group" style="position: relative;">
+        <label>Password</label>
+        <div style="position: relative;">
+          <input type="password" id="adm-pass" placeholder="Password" style="padding-right: 44px;"/>
+          <button type="button" id="toggle-adm-pass" onclick="togglePasswordVisibility('adm-pass', this)" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; background: none; border: none; padding: 4px; display: flex; align-items: center; justify-content: center; z-index: 10; color: var(--neutral-500); width: 32px; height: 32px;" aria-label="Toggle Password Visibility">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width: 20px; height: 20px;">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+            </svg>
+          </button>
+        </div>
+        <div class="err-msg" id="err-admpass">⚠ Incorrect username or password</div>
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn btn-outline" onclick="closeModal('modal-adm')">Cancel</button>
+      <button class="btn btn-primary" onclick="adminLogin()">Authorize &amp; Access Dashboard</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MAIN PORTAL SCREEN ===== -->
+<div id="s-portal" class="screen">
+  <div class="portal-header">
+    <div class="ph-left">
+      <button class="btn-hamburger" id="hamburger-btn" onclick="toggleSidebar()">☰</button>
+      <div class="ph-emblem">🏛️</div>
+      <div class="ph-text">
+        <strong>NQAS Portal</strong>
+        <span>Chittorgarh · Rajasthan</span>
+      </div>
+    </div>
+    <div class="ph-right">
+      <div class="ph-badge" id="hdr-name">—</div>
+      <div class="ph-role" id="hdr-role">Assessor</div>
+      <button class="btn-logout" onclick="doLogout()">Logout</button>
+    </div>
+  </div>
+  
+  <div class="progress-bar">
+    <div class="progress-fill" id="progress-fill"></div>
+  </div>
+
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()" style="display:none;"></div>
+  
+  <div class="portal-layout">
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-lbl">Assessment Workflow</div>
+      <div class="nav-item active" data-sec="s1" onclick="goSec('s1');closeSidebar()">
+        <span class="ni-icon">📋</span>Desk Baseline &amp; Metadata<span class="nav-step">01</span>
+      </div>
+      <div class="nav-item" data-sec="s2" onclick="goSec('s2');closeSidebar()">
+        <span class="ni-icon">📝</span>Assessor Registry<span class="nav-step">02</span>
+      </div>
+      <div class="nav-item" data-sec="s3" onclick="goSec('s3');closeSidebar()">
+        <span class="ni-icon">📥</span>Approved Checklists<span class="nav-step">03</span>
+      </div>
+      <div class="nav-item" data-sec="s4" onclick="goSec('s4');closeSidebar()">
+        <span class="ni-icon">📤</span>Submit Audit Records<span class="nav-step">04</span>
+      </div>
+      <div class="nav-item" data-sec="s5" onclick="goSec('s5');closeSidebar()">
+        <span class="ni-icon">📄</span>Authorizing Orders<span class="nav-step">05</span>
+      </div>
+      
+      <!-- ADMIN TOOLS IN SIDEBAR -->
+      <div id="nav-admin" style="display:none">
+        <div class="sidebar-lbl" style="margin-top:2rem">Admin Tools</div>
+        <div class="nav-item" data-sec="admin-blocks" id="nav-item-blocks" onclick="goSec('admin-blocks');closeSidebar()">
+          <span class="ni-icon">🏢</span>Block Progress Oversight
+        </div>
+        <div class="nav-item" data-sec="admin-dash" id="nav-item-dash" onclick="goSec('admin-dash');closeSidebar()">
+          <span class="ni-icon">⚙️</span>Baseline Parameter Console
+        </div>
+      </div>
+    </div>
+
+    <div class="portal-main">
+
+      <!-- SEC 1: AUDIT DESK DETAILS -->
+      <div id="sec-s1" class="section-content active">
+        <!-- ADMIN SANDBOX MODE BANNER -->
+        <div id="admin-sandbox-banner" style="display:none; background-color: var(--accent-pale); border: 1.5px solid var(--accent-border); border-left: 4px solid var(--accent-gold); border-radius: var(--radius-lg); padding: 12px 16px; font-size: 0.82rem; color: #7c2d12; margin-bottom: 1.5rem; font-weight: 600; align-items: center; justify-content: space-between; gap:10px;">
+          <span>🛠️ Administrator Preview Sandbox — Any changes made or submitted in this workflow are simulated and will NOT be written to the live database.</span>
+        </div>
+
+        <div class="sec-hd">
+          <div class="sec-tag">Section 01</div>
+          <h2>Facility Quality Baseline Records</h2>
+          <p>Official baseline parameters verified by the District Quality Assurance Committee (DQAC).</p>
+        </div>
+        
+        <!-- ADMIN BROWSE FACILITY BLOCK -->
+        <div id="admin-facility-browser" style="display:none;" class="facility-selector-bar">
+          <label>🔍 Browse any facility's data</label>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;">
+            <select id="abr-ftype" onchange="abrPopBlocks()" style="max-width:180px;">
+              <option value="">Type</option>
+              <option value="AAM-SC">AAM-SC</option>
+              <option value="PHC">PHC</option>
+            </select>
+            <select id="abr-block" disabled onchange="abrPopFacs()" style="max-width:180px;">
+              <option value="">Block</option>
+            </select>
+            <select id="abr-fac" disabled style="max-width:180px;">
+              <option value="">Facility</option>
+            </select>
+            <button class="btn btn-primary btn-sm" onclick="abrLoad()">View</button>
+          </div>
+        </div>
+
+        <div class="admin-bar" id="admin-bar-s1">
+          <span>🛡️ Authorized Override: Update facility operational parameters and baseline quality metrics.</span>
+          <button class="btn-edit-admin" onclick="openEditDesk()">Edit Fields ✏️</button>
+        </div>
+        
+        <div class="card">
+          <div class="card-title">
+            <div class="card-title-icon">🏥</div>
+            Facility Information
+          </div>
+          <div class="info-grid">
+            <div class="info-field"><label>Facility Name</label><div class="info-val auto" id="vi-fname">—</div></div>
+            <div class="info-field"><label>Block Name</label><div class="info-val auto" id="vi-block">—</div></div>
+            <div class="info-field"><label>Facility Type</label><div class="info-val auto" id="vi-ftype">—</div></div>
+            <div class="info-field"><label>Medical Officer Incharge (MOIC) Name</label><div class="info-val" id="vi-incharge"><span class="empty">Not filled yet</span></div></div>
+            <div class="info-field"><label>Mobile Number</label><div class="info-val" id="vi-mobile"><span class="empty">—</span></div></div>
+            <div class="info-field"><label>NIN ID</label><div class="info-val" id="vi-nin"><span class="empty">—</span></div></div>
+            <div class="info-field"><label>SaQsham ID</label><div class="info-val" id="vi-saqsham"><span class="empty">—</span></div></div>
+          </div>
+        </div>
+        
+        <div class="card">
+          <div class="card-title">
+            <div class="card-title-icon">📊</div>
+            PSS CAPA Scores
+          </div>
+          <div class="score-grid">
+            <div class="score-month"><label id="vi-m1n">PSS CAPA Benchmark — Phase 1</label><div class="score-val empty" id="vi-s1">— %</div></div>
+            <div class="score-month"><label id="vi-m2n">PSS CAPA Benchmark — Phase 2</label><div class="score-val empty" id="vi-s2">— %</div></div>
+            <div class="score-month"><label id="vi-m3n">PSS CAPA Benchmark — Phase 3</label><div class="score-val empty" id="vi-s3">— %</div></div>
+          </div>
+        </div>
+
+        <!-- Institute NQAS Assessment Sheet (Assessor Download Section) -->
+        <div class="card" id="card-assessment-sheet">
+          <div class="card-title">
+            <div class="card-title-icon">📂</div>
+            Institutional NQAS Assessment Template (Master excel) <span class="ct-hi">/ Excel Format</span>
+          </div>
+          <div id="vi-sheet-container">
+            <!-- Dynamically populated via JS -->
+          </div>
+        </div>
+        
+        <div class="nav-btns">
+          <span></span>
+          <button class="btn btn-primary" onclick="goSec('s2')">Next Step →</button>
+        </div>
+      </div>
+
+      <!-- SEC 2: ASSESSMENT SPECS -->
+      <div id="sec-s2" class="section-content">
+        <div class="sec-hd">
+          <div class="sec-tag">Section 02</div>
+          <h2>Audit Registry &amp; Timeline Specifications</h2>
+          <p>Please specify the official date of assessment and list all participating evaluators.</p>
+        </div>
+        
+        <div class="card">
+          <div class="card-title">
+            <div class="card-title-icon">📅</div>
+            Assessment Date
+          </div>
+          <div class="form-row one">
+            <div class="fg">
+              <label>Date of Assessment</label>
+              <input type="date" id="assess-date"/>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">
+            <div class="card-title-icon">👥</div>
+            Authorized Evaluator Team Composition
+          </div>
+          <div class="assessor-list" id="assessor-list">
+            <div class="assessor-row" data-idx="0">
+              <div class="fg">
+                <label>Primary Evaluator (Assessor 1) Full Name</label>
+                <input type="text" class="asr-name" placeholder="1st Assessor name"/>
+              </div>
+              <div></div>
+              <div class="fg">
+                <label>Contact Number</label>
+                <div class="phone-row">
+                  <div class="phone-prefix">+91</div>
+                  <input type="tel" class="asr-phone" placeholder="10-digit" maxlength="10"/>
+                </div>
+              </div>
+              <div></div>
+            </div>
+            <div class="assessor-row" data-idx="1">
+              <div class="fg">
+                <label>Co-Evaluator (Assessor 2) Full Name</label>
+                <input type="text" class="asr-name" placeholder="2nd Assessor name"/>
+              </div>
+              <div></div>
+              <div class="fg">
+                <label>Contact Number</label>
+                <div class="phone-row">
+                  <div class="phone-prefix">+91</div>
+                  <input type="tel" class="asr-phone" placeholder="10-digit" maxlength="10"/>
+                </div>
+              </div>
+              <div></div>
+            </div>
+          </div>
+          <div style="margin-top:1.25rem">
+            <button class="btn-add-asr" id="btn-add-asr" onclick="addAssessor()">＋ Register Additional Assessor</button>
+          </div>
+        </div>
+        <div class="nav-btns">
+          <button class="btn btn-outline" onclick="goSec('s1')">← Back</button>
+          <button class="btn btn-primary" onclick="goSec('s3')">Next →</button>
+        </div>
+      </div>
+
+      <!-- SEC 3: CHECKLIST DOWNLOAD -->
+      <div id="sec-s3" class="section-content">
+        <div class="sec-hd">
+          <div class="sec-tag">Section 03</div>
+          <h2>Approved Checklist Retrieval Center</h2>
+          <p>Acquire the standardized quality checklist mandated for this institutional category.</p>
+        </div>
+        <div class="info-banner">
+          <span>ℹ️ Admin uploads checklists here for your facility type.</span>
+        </div>
+        <div class="admin-bar" id="admin-bar-s3" style="display:none">
+          <span>🛡️ Admin: Edit checklists from Admin Dashboard</span>
+          <button class="btn-edit-admin" onclick="goSec('admin-dash');adminTabSwitch('at-checklist')">Manage Checklists</button>
+        </div>
+        <div class="card">
+          <div class="card-title">
+            <div class="card-title-icon">📥</div>
+            Available Checklists
+          </div>
+          <div class="dl-grid" id="checklist-dl-list">
+            <div style="text-align:center;padding:2rem;color:var(--neutral-500);font-style:italic">
+              📋 No checklists available yet
+            </div>
+          </div>
+        </div>
+        <div class="nav-btns">
+          <button class="btn btn-outline" onclick="goSec('s2')">← Back</button>
+          <button class="btn btn-primary" onclick="goSec('s4')">Next →</button>
+        </div>
+      </div>
+
+      <!-- SEC 4: UPLOAD -->
+      <div id="sec-s4" class="section-content">
+        <div class="sec-hd">
+          <div class="sec-tag">Section 04</div>
+          <h2>National Quality Registry Upload Center</h2>
+          <p>Please upload the final signed assessment record (Word) and compiled honorarium invoice (PDF).</p>
+        </div>
+        <div class="card">
+          <div class="card-title">
+            <div class="card-title-icon">📄</div>
+            Official Quality Assessment Report <span class="ct-hi">(Word Format Only)</span>
+          </div>
+          <div class="upload-zone" id="uz-report">
+            <input type="file" id="file-report" accept=".doc,.docx" onchange="handleUpload('report')"/>
+            <div class="uz-icon">📝</div>
+            <div class="uz-label"><strong>Click to upload</strong> or drag &amp; drop<br/>Upload compiled report in Word format only (.doc, .docx).</div>
+          </div>
+          <div class="file-preview" id="fp-report">✅ <span id="fp-report-name"></span> — Ready to submit</div>
+        </div>
+        <div class="card">
+          <div class="card-title">
+            <div class="card-title-icon">📃</div>
+            Honorarium Claim &amp; Identity Verification Form <span class="ct-hi">(PDF Format Only)</span>
+          </div>
+          <div class="upload-note">
+            📌 <strong>Verification Mandate:</strong> Compile your Aadhaar, PAN Card, and Cancelled Cheque with the signed honorarium sheet in a single PDF.<br/>
+          </div>
+          <div class="upload-zone" id="uz-honor">
+            <input type="file" id="file-honor" accept=".pdf" onchange="handleUpload('honor')"/>
+            <div class="uz-icon">📋</div>
+            <div class="uz-label"><strong>Click to upload</strong> or drag &amp; drop<br/>PDF file only</div>
+          </div>
+          <div class="file-preview" id="fp-honor">✅ <span id="fp-honor-name"></span> — Ready to submit</div>
+        </div>
+        <div class="nav-btns">
+          <button class="btn btn-outline" onclick="goSec('s3')">← Back</button>
+          <button class="btn btn-primary" onclick="goSec('s5')">Next →</button>
+        </div>
+      </div>
+
+      <!-- SEC 5: OFFICE ORDER -->
+      <div id="sec-s5" class="section-content">
+        <!-- Wrapper container to prevent assessor scrolling confusion upon final submission -->
+        <div id="s5-form-content">
+          <div class="sec-hd">
+            <div class="sec-tag">Section 05</div>
+            <h2>Verify Assessment Orders &amp; Directives</h2>
+            <p>Select the authorized administrative cycle group. State and District orders must be uploaded to finalize the registry record.</p>
+          </div>
+          <div class="admin-bar" id="admin-bar-s5" style="display:none">
+            <span>🛡️ Admin: Manage order groups</span>
+            <button class="btn-edit-admin" onclick="goSec('admin-dash');adminTabSwitch('at-orders')">Manage Orders</button>
+          </div>
+          <div class="card">
+            <div class="card-title">
+              <div class="card-title-icon">📑</div>
+              Authorized Office Order Cycle Groups
+            </div>
+            <div class="order-list" id="order-list">
+              <div style="text-align:center;padding:2rem;color:var(--neutral-500);font-style:italic">
+                📑 No order groups added yet
+              </div>
+            </div>
+          </div>
+
+          <!-- Assessor upload panel inside Section 5 order selection -->
+          <div class="card" id="assessor-order-upload-card" style="display:none; margin-top:1.5rem;">
+            <div class="card-title">
+              <div class="card-title-icon">📤</div>
+              Archive Official Authorization Directives <span class="ct-hi">/ Selected Group Upload</span>
+            </div>
+            <div class="form-row">
+              <div>
+                <label style="display:block; font-size:0.8rem; font-weight:600; margin-bottom:6px; color:var(--neutral-900);">State Operational Directive (PDF)</label>
+                <div class="upload-zone" id="uz-state-order" style="padding: 1.5rem 1rem;">
+                  <input type="file" id="file-state-order" accept=".pdf" onchange="handleUpload('state-order')"/>
+                  <div class="uz-icon" style="font-size:1.5rem;">📋</div>
+                  <div class="uz-label" style="font-size:0.8rem;"><strong>Click to upload</strong> or drag State PDF</div>
+                </div>
+                <div class="file-preview" id="fp-state-order">✅ <span id="fp-state-order-name"></span> — Ready to submit</div>
+              </div>
+              
+              <div>
+                <label style="display:block; font-size:0.8rem; font-weight:600; margin-bottom:6px; color:var(--neutral-900);">District Office Order (PDF)</label>
+                <div class="upload-zone" id="uz-dist-order" style="padding: 1.5rem 1rem;">
+                  <input type="file" id="file-dist-order" accept=".pdf" onchange="handleUpload('dist-order')"/>
+                  <div class="uz-icon" style="font-size:1.5rem;">📋</div>
+                  <div class="uz-label" style="font-size:0.8rem;"><strong>Click to upload</strong> or drag District PDF</div>
+                </div>
+                <div class="file-preview" id="fp-dist-order">✅ <span id="fp-dist-order-name"></span> — Ready to submit</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="nav-btns">
+            <button class="btn btn-outline" onclick="goSec('s4')">← Back</button>
+            <button class="btn btn-teal btn-block" id="btn-submit" onclick="submitAll()" style="max-width:340px">🔒 Commit Assessment to Public Registry</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== SEC: ADMIN TOOLS - BLOCK STATUS ===== -->
+      <div id="sec-admin-blocks" class="section-content">
+        <div class="sec-hd">
+          <div class="sec-tag">Admin Tools</div>
+          <h2>District Block Auditing Oversight &amp; Status Monitor</h2>
+          <p>Consolidated block monitoring panel detailing operational metrics and submission times across Chittorgarh.</p>
+        </div>
+
+        <!-- Real-Time Filter Search Bar inside Block Status -->
+        <div class="facility-selector-bar" style="background-color: var(--primary-pale); border: 1px solid rgba(28, 56, 102, 0.15); margin-bottom: 1.5rem;">
+          <label style="color: var(--primary-900); font-weight: 700; margin-bottom: 8px; display: block;">🔍 Oversight Filter — Search Blocks:</label>
+          <input type="text" id="block-search-input" oninput="filterBlocks()" placeholder="Type block name (e.g. Begun, Kapasan, Rashmi)..." style="width:100%; padding:10px 14px; border:1.5px solid var(--neutral-300); border-radius:var(--radius); font-size:0.9rem; outline:none;" />
+        </div>
+        
+        <div id="blocks-timeline-container" style="display: flex; flex-direction: column; gap: 1.5rem;">
+          <!-- Accordion/Detailed card nodes dynamically populated via JS -->
+        </div>
+      </div>
+
+      <!-- ===== SEC: ADMIN TOOLS - DASHBOARD ===== -->
+      <div id="sec-admin-dash" class="section-content">
+        <div class="sec-hd">
+          <div class="sec-tag">Admin Tools</div>
+          <h2>Baseline Parameter Console</h2>
+        </div>
+        
+        <div class="admin-tabs">
+          <button class="admin-tab active" id="tab-btn-desk" onclick="adminTabSwitch('at-desk')">🏥 Metadata Baseline</button>
+          <button class="admin-tab" id="tab-btn-checklist" onclick="adminTabSwitch('at-checklist')">📥 Audit Checklists</button>
+          <button class="admin-tab" id="tab-btn-orders" onclick="adminTabSwitch('at-orders')">📑 Order Group</button>
+          <button class="admin-tab" id="tab-btn-admins" onclick="adminTabSwitch('at-admins')">👤 Sub-Admin Accounts</button>
+        </div>
+
+        <!-- DESK DATA TAB -->
+        <div id="at-desk" class="admin-tab-content active">
+          <div class="facility-selector-bar">
+            <label>📍 Select facility to edit its desk data:</label>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+              <select id="adm-sel-ftype" onchange="admPopBlocks()">
+                <option value="">— Facility Type —</option>
+              </select>
+              <select id="adm-sel-block" onchange="admPopFacilities()" disabled>
+                <option value="">— Block —</option>
+              </select>
+              <select id="adm-sel-facility" onchange="loadDeskData()" disabled>
+                <option value="">— Facility Name —</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="card">
+            <div class="card-title">
+              <div class="card-title-icon">✏️</div>
+              Authorized Override: Update Facility Metadata Baseline
+            </div>
+            <div class="form-row">
+              <div class="fg"><label>Incharge Name</label><input type="text" id="adm-incharge" placeholder="Incharge name"/></div>
+              <div class="fg"><label>Mobile</label><input type="tel" id="adm-mobile" maxlength="10" placeholder="10-digit"/></div>
+            </div>
+            <div class="form-row">
+              <div class="fg"><label>NIN ID</label><input type="text" id="adm-nin" placeholder="NIN ID"/></div>
+              <div class="fg"><label>SaQsham ID</label><input type="text" id="adm-saqsham" placeholder="SaQsham ID"/></div>
+            </div>
+
+            <!-- Admin/Subadmin Excel Upload field for Desk info -->
+            <div class="form-row">
+              <div class="fg" style="grid-column: span 2; margin-top: 0.5rem;">
+                <label>Institute NQAS Assessment Sheet <span class="hi" style="font-weight: 400; color: var(--neutral-500);">(Excel format only)</span></label>
+                <input type="file" id="adm-sheet" accept=".xls,.xlsx" onchange="handleAdminSheetUpload('adm')"/>
+                <div id="adm-sheet-preview" style="display:none; margin-top: 0.5rem; font-size: 0.8rem; color: var(--success); font-weight: 500;">
+                  ✅ Selected Sheet: <span id="adm-sheet-name"></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- VISUAL HEADER GROUP: PSS CAPA SCORE -->
+            <div style="border-top: 1px solid var(--neutral-200); margin: 1.5rem 0 1rem; padding-top: 1.25rem;">
+              <h4 style="font-size:0.85rem; font-weight:700; color:var(--primary); text-transform:uppercase; letter-spacing:0.5px; display:flex; align-items:center; gap:8px;">
+                📊 PSS CAPA Scores
+              </h4>
+            </div>
+
+            <div class="form-row three">
+              <div class="fg"><label>Month 1</label><input type="text" id="adm-m1n" placeholder="e.g. January"/></div>
+              <div class="fg"><label>Month 2</label><input type="text" id="adm-m2n" placeholder="e.g. February"/></div>
+              <div class="fg"><label>Month 3</label><input type="text" id="adm-m3n" placeholder="e.g. March"/></div>
+            </div>
+            <div class="form-row three">
+              <div class="fg"><label>Score 1</label><input type="text" id="adm-s1" placeholder="e.g. 78.5"/></div>
+              <div class="fg"><label>Score 2</label><input type="text" id="adm-s2" placeholder="e.g. 82"/></div>
+              <div class="fg"><label>Score 3</label><input type="text" id="adm-s3" placeholder="e.g. 91"/></div>
+            </div>
+            <button class="btn btn-primary" onclick="saveDeskData()" style="margin-top:1.5rem">💾 Save Desk Data</button>
+          </div>
+        </div>
+
+        <!-- CHECKLIST TAB (Super-Admin Only) -->
+        <div id="at-checklist" class="admin-tab-content">
+          <div class="card">
+            <div class="card-title">
+              <div class="card-title-icon">➕</div>
+              Add New Checklist
+            </div>
+            <div class="form-row">
+              <div class="fg"><label>Document Name</label><input type="text" id="new-cl-name" placeholder="e.g. AAM-SC Assessment Format"/></div>
+              <div class="fg"><label>Facility Type</label>
+                <select id="new-cl-ftype">
+                  <option value="All">All Facilities</option>
+                  <option value="AAM-SC">AAM-SC Only</option>
+                  <option value="PHC">PHC Only</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row one">
+              <div class="fg"><label>Download URL</label><input type="url" id="new-cl-url" placeholder="https://drive.google.com/..."/></div>
+            </div>
+            <button class="btn btn-primary" onclick="addChecklist()" style="margin-top: 1rem;">➕ Add Checklist</button>
+          </div>
+          
+          <div class="card">
+            <div class="card-title">
+              <div class="card-title-icon">📋</div>
+              All Active Checklists
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Document Name</th>
+                    <th>Facility Type</th>
+                    <th>Download Link</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="cl-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ORDERS TAB (Super-Admin Only) -->
+        <div id="at-orders" class="admin-tab-content">
+          <div class="card">
+            <div class="card-title">
+              <div class="card-title-icon">➕</div>
+              Add Order Group
+            </div>
+            <div class="form-row one">
+              <div class="fg"><label>Group Title</label><input type="text" id="new-og-title" placeholder="e.g. Group A — January 2025"/></div>
+            </div>
+            <button class="btn btn-primary" onclick="addOrderGroup()" style="margin-top: 1rem;">➕ Add Group</button>
+          </div>
+          
+          <div class="card">
+            <div class="card-title">
+              <div class="card-title-icon">📑</div>
+              All Active Order Groups
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Title</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="og-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUB-ADMINS TAB (Super-Admin Only) -->
+        <div id="at-admins" class="admin-tab-content">
+          <div class="card">
+            <div class="card-title">
+              <div class="card-title-icon">👤</div>
+              Register New Sub-Admin Authority
+            </div>
+            <div class="form-row">
+              <div class="fg"><label>Username</label><input type="text" id="new-adm-user" placeholder="New admin username"/></div>
+              <div class="fg"><label>Password</label><input type="text" id="new-adm-pass" placeholder="Password"/></div>
+            </div>
+            <button class="btn btn-primary" onclick="createSubAdmin()" style="margin-top: 1rem;">➕ Register Authorized Account</button>
+          </div>
+          
+          <div class="card">
+            <div class="card-title">
+              <div class="card-title-icon">📋</div>
+              Sub-Admin Accounts
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Username</th>
+                    <th>Created On</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="adm-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /portal-main -->
+  </div><!-- /portal-layout -->
+</div><!-- /s-portal -->
+
+<!-- SUBMISSION SUCCESS MODAL -->
+<div id="modal-sub-success" class="modal-overlay">
+  <div class="modal" style="max-width:550px; text-align:center;">
+    <div class="modal-hd" style="background-color: var(--success-bg); border-bottom: 1px solid var(--success-border); padding: 2rem 1.5rem;">
+      <div style="font-size: 4rem; line-height: 1; margin-bottom: 1rem;">🏛️</div>
+      <h3 style="color: var(--success); font-family: 'Playfair Display', Georgia, serif; font-size: 1.5rem;">Assessment Securely Committed to Registry</h3>
+      <p style="font-size: 0.75rem; font-weight: 500; text-transform: uppercase; color: var(--success); letter-spacing: 1px; margin-top: 4px;">Health &amp; Family Welfare Quality Registry, Govt. of Rajasthan</p>
+    </div>
+    <div class="modal-bd" style="padding: 2.25rem 2rem; line-height: 1.6;">
+      <p style="font-size: 1.05rem; font-weight: 600; color: var(--primary-900); margin-bottom: 1rem;">Dhanyawad! Your quality assessment metrics have been safely received.</p>
+      <p style="font-size: 0.88rem; color: var(--neutral-600); margin-bottom: 1.5rem;">
+        By completing this rigorous evaluation of the quality guidelines at <strong id="success-facility-name" style="color: var(--primary);">[Facility Name]</strong>, you are safeguarding the health of Chittorgarh's citizens and strengthening the trust of our communities in public healthcare systems.
+      </p>
+      <p style="font-size: 0.82rem; font-style: italic; color: var(--neutral-60); padding: 0.75rem 1rem; background-color: var(--neutral-50); border-radius: var(--radius); border-left: 3px solid var(--accent-gold);">
+        "Quality is indeed our pledge, and your work today brings us closer to that ideal."
+      </p>
+    </div>
+    <div class="modal-ft" style="background-color: var(--neutral-50); padding: 1.25rem 2rem; display: flex; justify-content: center;">
+      <button class="btn btn-teal btn-block" onclick="completeSessionLogout()" style="max-width: 280px; font-weight: 700; letter-spacing: 0.5px;">✅ [OK] - Complete Session</button>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT DESK MODAL -->
+<div id="modal-edit-desk" class="modal-overlay">
+  <div class="modal" style="max-width:600px">
+    <div class="modal-hd">
+      <h3>✏️ Edit Desk Information <small>Update Facility Parameters</small></h3>
+    </div>
+    <div class="modal-bd" style="max-height:65vh;overflow-y:auto">
+      <div class="form-row">
+        <div class="fg"><label>Incharge Name</label><input type="text" id="ed-incharge"/></div>
+        <div class="fg"><label>Mobile</label><input type="tel" id="ed-mobile" maxlength="10"/></div>
+      </div>
+      <div class="form-row">
+        <div class="fg"><label>NIN ID</label><input type="text" id="ed-saqsham"/></div> <!-- Fixed NIN ID field mapping -->
+        <div class="fg"><label>SaQsham ID</label><input type="text" id="ed-nin"/></div> <!-- Fixed SaQsham ID field mapping -->
+      </div>
+
+      <!-- Admin/Subadmin Excel Upload field inside Modal -->
+      <div class="form-row">
+        <div class="fg" style="grid-column: span 2; margin-top: 0.5rem;">
+          <label>Institute NQAS Assessment Sheet <span class="hi" style="font-weight: 400; color: var(--neutral-500);">(Excel format only)</span></label>
+          <input type="file" id="ed-sheet" accept=".xls,.xlsx" onchange="handleAdminSheetUpload('ed')"/>
+          <div id="ed-sheet-preview" style="display:none; margin-top: 0.5rem; font-size: 0.8rem; color: var(--success); font-weight: 500;">
+            ✅ Selected Sheet: <span id="ed-sheet-name"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- VISUAL HEADER GROUP: PSS CAPA SCORE -->
+      <div style="border-top: 1px solid var(--neutral-200); margin: 1.5rem 0 1rem; padding-top: 1.25rem;">
+        <h4 style="font-size:0.85rem; font-weight:700; color:var(--primary); text-transform:uppercase; letter-spacing:0.5px; display:flex; align-items:center; gap:8px;">
+          📊 PSS CAPA Scores
+        </h4>
+      </div>
+
+      <div class="form-row three">
+        <div class="fg"><label>Month 1</label><input type="text" id="ed-m1n"/></div>
+        <div class="fg"><label>Month 2</label><input type="text" id="ed-m2n"/></div>
+        <div class="fg"><label>Month 3</label><input type="text" id="ed-m3n"/></div>
+      </div>
+      <div class="form-row three">
+        <div class="fg"><label>Score 1</label><input type="text" id="ed-s1"/></div>
+        <div class="fg"><label>Score 2</label><input type="text" id="ed-s2"/></div>
+        <div class="fg"><label>Score 3</label><input type="text" id="ed-s3"/></div>
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn btn-outline" onclick="closeModal('modal-edit-desk')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveEditDesk()">💾 Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><span id="toast-msg">Saved!</span></div>
+
+<script src="script.js"></script>
+</body>
+</html>

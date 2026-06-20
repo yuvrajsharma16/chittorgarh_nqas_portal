@@ -47,14 +47,11 @@
   padding: 0;
   box-sizing: border-box;
 }
-html, body {
-  overflow-x: hidden !important;
-  width: 100vw !important;
-  max-width: 100% !important;
-}
 html {
   scroll-behavior: smooth;
   font-size: 15px;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 body {
   font-family: 'Inter', -apple-system, sans-serif;
@@ -63,6 +60,8 @@ body {
   line-height: 1.5;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 /* ===== LOADING OVERLAY ===== */
@@ -242,12 +241,12 @@ body {
 }
 .wh-quote-en {
   font-size: 0.82rem;
-  color: var(--neutral-500);
+  color: var(--neutral-50);
   line-height: 1.5;
 }
 .wh-attr {
   font-size: 0.75rem;
-  font-weight: 655;
+  font-weight: 650;
   color: var(--accent-gold);
   margin-top: 0.75rem;
   text-transform: uppercase;
@@ -1408,7 +1407,7 @@ body {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: var(--neutral-500);
+  color: var(--neutral-505);
   border-bottom: 1.5px solid var(--neutral-200);
   background-color: var(--neutral-50);
 }
@@ -1571,169 +1570,117 @@ body {
 }
 
 @media(max-width:768px) {
-  /* BUG 3: Global Horizontal Overflow Protection */
-  html, body {
-    overflow-x: hidden !important;
-    width: 100vw !important;
-    max-width: 100% !important;
+  /* --- GLOBAL BASE ADJUSTMENTS --- */
+  body {
+    font-size: 14px;
   }
 
-  /* BUG 1: Top Header / Navbar Overlap & Squish Protection */
-  .portal-header {
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    padding: 0 12px !important; /* Tight padding to save space */
+  /* --- GOVERNMENT HEADER RIBBON --- */
+  .gov-top-bar {
+    padding: 6px 1rem;
+    flex-direction: column;
+    gap: 4px;
+    text-align: center;
   }
-  .ph-left {
-    display: flex !important;
-    align-items: center !important;
-    gap: 8px !important;
-    min-width: 0 !important;
-    flex: 1 !important;
+  .gov-top-left {
+    flex-direction: column;
+    gap: 2px;
   }
-  .ph-emblem {
-    flex-shrink: 0 !important;
-    width: 36px !important;
-    height: 36px !important;
-    font-size: 1.4rem !important;
-  }
-  .ph-text {
-    min-width: 0 !important;
-    flex: 1 !important;
-  }
-  .ph-text strong {
-    font-size: 0.9rem !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    display: block !important;
-  }
-  .ph-text span {
-    display: none !important; /* Hide location text / subtitle on mobile */
-  }
-  .ph-right {
-    display: flex !important;
-    align-items: center !important;
-    gap: 8px !important;
-    flex-shrink: 0 !important;
-  }
-  .ph-badge, .ph-role {
-    flex-shrink: 0 !important;
-    padding: 4px 8px !important;
-    font-size: 0.7rem !important;
-  }
-  .btn-logout {
-    flex-shrink: 0 !important;
-    padding: 6px 10px !important;
-    font-size: 0.75rem !important;
-    min-height: 36px !important; /* Balanced for header height */
+  .gov-top-left span[style*="opacity"] {
+    display: none !important; /* Hides pipe dividers on mobile screen layouts */
   }
 
-  /* BUG 2: Login Modal & Button Overflow Protection */
-  .modal {
-    width: 90% !important;
-    max-width: 400px !important;
-    margin: 0 auto !important;
-    height: auto !important;
-    min-height: auto !important;
-  }
-  .modal-ft {
-    display: flex !important;
-    flex-direction: column-reverse !important; /* Stacks vertically: Cancel at bottom, Action at top */
-    gap: 12px !important;
-    width: 100% !important;
-    padding: 1.5rem !important;
-  }
-  .modal-ft .btn {
-    width: 100% !important;
-    justify-content: center !important;
-    min-height: 48px !important; /* thumb-friendly touch target */
-  }
-
-  /* Screen Padding */
-  .portal-main {
-    padding: 1.5rem 16px !important;
-    width: 100%;
+  /* --- WELCOME HERO SCREEN RESPONSIVENESS --- */
+  #s-welcome::before {
+    display: none; /* Hides overlay element to retain contrast on mobile devices */
   }
   .welcome-hero {
-    padding: 3rem 16px !important;
-    gap: 2.5rem !important;
+    padding: 2rem 1rem;
+    gap: 2rem;
+    min-height: auto;
+  }
+  .wh-emblem-box {
+    margin-bottom: 1.5rem;
+  }
+  .wh-title {
+    font-size: 1.85rem;
+  }
+  .wh-quote {
+    padding: 1.25rem;
+  }
+  .wh-quote-hi {
+    font-size: 0.9rem;
   }
   .wh-login-panel {
-    padding: 2rem 16px !important;
+    padding: 1.75rem 1.25rem;
+  }
+  .login-card {
+    padding: 1.15rem;
+    gap: 12px;
+  }
+  .lc-icon {
+    width: 46px;
+    height: 46px;
+    font-size: 1.6rem;
   }
 
-  /* Text Wrapping Safe Gates */
-  .wh-title {
-    font-size: 2.2rem !important;
-    word-break: break-word;
+  /* --- PORTAL NAVBAR SPACING CONTROLS --- */
+  .portal-header {
+    padding: 0 0.85rem;
+    height: auto;
+    min-height: var(--header-h);
+    padding-top: 8px;
+    padding-bottom: 8px;
+    flex-wrap: wrap;
+    gap: 8px;
   }
-  .sec-hd h2 {
-    font-size: 1.35rem !important;
-    word-break: break-word;
+  .ph-left {
+    gap: 8px;
+    flex: 1;
+    min-width: 0;
   }
-  .info-val, .oi-title, .dl-info strong {
-    word-break: break-word !important;
-    white-space: normal !important;
+  .ph-emblem {
+    width: 38px;
+    height: 38px;
+    font-size: 1.4rem;
+    flex-shrink: 0;
   }
-
-  /* Touch Targets (Minimum 48px Height/Width) */
-  .btn, .btn-primary, .btn-teal, .btn-gold, .btn-danger, .btn-outline {
-    min-height: 48px !important;
-    padding: 12px 20px !important;
+  .ph-text {
+    min-width: 0;
   }
-  .form-group input, .form-group select, .form-group textarea,
-  .fg input, .fg select, .fg textarea {
-    min-height: 48px !important;
-    font-size: 16px !important; /* Prevents auto-zoom on iOS */
+  .ph-text strong {
+    font-size: 0.88rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
-  .form-group, .fg {
-    margin-bottom: 12px !important; /* Mis-tap prevention: 10px+ vertical separation */
+  .ph-text span {
+    display: none !important; /* Excludes region details on small views */
   }
-
-  /* Dynamic Dropdowns & Administrative Browsers grid collapse */
-  .facility-selector-bar div, 
-  #admin-facility-browser div {
-    flex-direction: column !important;
-    align-items: stretch !important;
-    gap: 12px !important;
+  .ph-right {
+    gap: 6px;
+    flex-shrink: 0;
   }
-  .facility-selector-bar select, 
-  #admin-facility-browser select,
-  .facility-selector-bar button,
-  #admin-facility-browser button {
-    width: 100% !important;
-    max-width: 100% !important;
-    min-height: 48px !important;
+  .ph-badge {
+    display: none !important; /* Restricts visibility of name elements on slim layouts */
   }
-
-  /* Top horizontal scrollable tab containers */
-  .admin-tabs {
-    display: flex !important;
-    overflow-x: auto !important;
-    white-space: nowrap !important;
-    gap: 12px !important;
-    border-bottom: 1.5px solid var(--neutral-200) !important;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none; /* Hide standard Firefox scrollbars */
-    padding: 0 4px !important;
-    width: 100% !important;
+  .ph-role {
+    font-size: 0.68rem;
+    padding: 4px 8px;
+    flex-shrink: 0;
   }
-  .admin-tabs::-webkit-scrollbar {
-    display: none !important; /* Hide Chrome/Safari scrollbars */
+  .btn-logout {
+    padding: 6px 10px;
+    font-size: 0.78rem;
+    flex-shrink: 0;
   }
-  .admin-tab {
-    flex: 0 0 auto !important; /* Prevent tab scaling compression, allow clean swipe */
-    padding: 12px 16px !important;
-    min-height: 48px !important;
-    border-bottom: 3px solid transparent;
-  }
-
-  /* Sidebar & layout overrides */
   .btn-hamburger {
     display: block;
+    flex-shrink: 0;
+    padding: 6px;
   }
+
+  /* --- DRAWER INTERFACES --- */
   .sidebar {
     position: fixed;
     top: calc(var(--header-h) + 4px);
@@ -1751,30 +1698,157 @@ body {
     display: block;
   }
 
-  /* Grid & Flex Collapses */
+  /* --- PORTAL CONTAINER SPACING --- */
+  .portal-main {
+    padding: 1.25rem 1rem;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+  .sec-hd {
+    margin-bottom: 1.5rem;
+  }
+  .sec-hd h2 {
+    font-size: 1.3rem;
+  }
+  .card {
+    padding: 1.25rem 1rem;
+    border-radius: var(--radius-lg);
+    margin-bottom: 1.25rem;
+  }
+
+  /* --- MODAL DIALOGUES VIEWPORT FIXES --- */
+  .modal-overlay {
+    padding: 1rem;
+  }
+  .modal {
+    width: 100%;
+    max-width: 380px !important;
+    border-radius: var(--radius-lg);
+  }
+  .modal-hd {
+    padding: 1.25rem 1.5rem;
+  }
+  .modal-bd {
+    padding: 1.5rem 1.25rem;
+  }
+  .modal-ft {
+    padding: 1.25rem;
+    flex-direction: column-reverse; /* Reverses cancel button below submit on mobile viewports */
+    gap: 8px;
+  }
+  .modal-ft .btn {
+    width: 100% !important;
+    flex: none !important;
+  }
+
+  /* --- INLINE DROPDOWN AND SEARCH ADJUSTMENTS --- */
+  .facility-selector-bar {
+    padding: 1rem;
+  }
+  .facility-selector-bar div[style*="display:flex"], 
+  .facility-selector-bar div[style*="display: flex"] {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+  }
+  .facility-selector-bar select {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+  .facility-selector-bar button {
+    width: 100% !important;
+    padding: 10px !important;
+  }
+
+  /* --- DATA GRID FIELD ARRANGEMENT --- */
   .form-row, .form-row.three {
     grid-template-columns: 1fr !important;
-    gap: 12px !important;
+    gap: 1rem;
   }
   .assessor-row {
     grid-template-columns: 1fr !important;
-    gap: 12px !important;
-    padding: 1.25rem !important;
+    gap: 0.85rem !important;
+    padding: 1rem !important;
+  }
+  .assessor-row > div:empty {
+    display: none !important; /* Hides trailing inline gap elements to clean field grids */
   }
   .btn-rm-asr {
     width: 100%;
-    min-height: 48px !important;
+    height: 44px;
+    margin-top: 4px;
   }
+
+  /* --- FORM FLOW STEPS --- */
+  .nav-btns {
+    flex-direction: column-reverse;
+    gap: 10px;
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+  }
+  .nav-btns .btn {
+    width: 100% !important;
+  }
+
+  /* --- STANDARDIZED SCORING GRIDS --- */
   .score-grid {
     grid-template-columns: 1fr !important;
-    gap: 12px !important;
+    gap: 1rem;
   }
   .info-grid {
     grid-template-columns: 1fr !important;
-    gap: 12px !important;
+    gap: 1rem;
   }
-  .ph-badge {
-    display: none;
+
+  /* --- DOWNLOAD DOCUMENT TILES --- */
+  .dl-item {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+    padding: 1.15rem 1rem;
+    gap: 10px;
+  }
+  .dl-icon {
+    margin: 0 auto;
+  }
+  .dl-info strong {
+    white-space: normal; /* Permits name scaling */
+  }
+  .dl-btn {
+    width: 100%;
+  }
+
+  /* --- COMPRESSED DRAG/DROP ZONE --- */
+  .upload-zone {
+    padding: 1.75rem 1rem;
+  }
+  .uz-label {
+    font-size: 0.8rem !important;
+  }
+
+  /* --- DATA TABLES (HORIZONTAL GATES) --- */
+  .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-top: 0.75rem;
+  }
+  .data-table {
+    white-space: nowrap; /* Forces standard scrolling columns instead of cramped wrapping boxes */
+  }
+  .data-table th, .data-table td {
+    padding: 10px 12px;
+    font-size: 0.8rem;
+  }
+  
+  /* --- SYSTEM TAB SELECTION --- */
+  .admin-tabs {
+    -webkit-overflow-scrolling: touch;
+  }
+  .admin-tab {
+    padding: 0.75rem 1rem;
+    font-size: 0.8rem;
   }
 }
 
